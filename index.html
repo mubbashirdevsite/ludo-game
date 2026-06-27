@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎲 Ludo Game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="game-container">
+    <h1>🎲 Ludo Game</h1>
+
+    <!-- ══════════════ START SCREEN ══════════════ -->
+    <div id="startScreen" class="screen active">
+
+        <div class="instructions">
+            <h3>🎮 Kaise Khelna Hai:</h3>
+            <ul>
+                <li>2, 3 ya 4 players khel sakte hain</li>
+                <li>Dice roll karo aur apne tokens move karo</li>
+                <li>6 aane par token ghar se bahar nikalo</li>
+                <li>6 aane par ek bonus turn milta hai</li>
+                <li>Dusre player ke token ko maaro — woh ghar wapas chale jaate hain</li>
+                <li>⭐ Safe spots pe koi capture nahi ho sakta</li>
+                <li>Sabse pehle apne <strong>4 tokens</strong> finish line pe pahunchao!</li>
+            </ul>
+        </div>
+
+        <div class="player-selection">
+            <h2 style="color:#667eea; margin-bottom:20px;">Kitne Players?</h2>
+            <button class="player-count-btn" onclick="startGame(2)">👥 2 Players</button>
+            <button class="player-count-btn" onclick="startGame(3)">👥 3 Players</button>
+            <button class="player-count-btn" onclick="startGame(4)">👥 4 Players</button>
+        </div>
+    </div>
+
+    <!-- ══════════════ GAME SCREEN ══════════════ -->
+    <div id="gameScreen" class="screen">
+
+        <!-- Player info cards -->
+        <div class="game-info" id="playersInfo"></div>
+
+        <!-- Status message -->
+        <div class="message" id="messageBox">Red player ki baari — Dice roll karo!</div>
+
+        <!-- Ludo board -->
+        <div class="board-container">
+            <div class="ludo-board" id="ludoBoard"></div>
+        </div>
+
+        <!-- Dice -->
+        <div class="dice-container">
+            <div class="dice" id="dice" onclick="rollDice()" title="Click to roll!">🎲</div>
+            <p style="margin-top:8px; font-weight:bold; color:#667eea;">Click karke Roll Karo!</p>
+        </div>
+
+        <button class="btn" onclick="showStart()">🏠 Main Menu</button>
+    </div>
+
+    <!-- ══════════════ END SCREEN ══════════════ -->
+    <div id="endScreen" class="screen">
+        <div style="font-size:72px; margin:20px 0;">🏆</div>
+        <h2 class="winner-announcement" id="winnerText"></h2>
+
+        <!-- Final scoreboard -->
+        <table class="score-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Tokens Finished</th>
+                </tr>
+            </thead>
+            <tbody id="scoreTbody"></tbody>
+        </table>
+
+        <button class="btn" onclick="startGame(numPlayers)">🔄 Dobara Khelo</button>
+        <button class="btn" onclick="showStart()">🏠 Main Menu</button>
+    </div>
+
+</div><!-- .game-container -->
+
+<!-- ── Scripts (order matters) ── -->
+<script src="data/gameData.js"></script>
+<script src="js/game.js"></script>
+<script src="js/board.js"></script>
+<script src="js/ui.js"></script>
+
+<script>
+    // Patch endGame to use showWinner (defined in ui.js)
+    function endGame(winnerName) {
+        showWinner(winnerName);
+    }
+</script>
+
+</body>
+</html>

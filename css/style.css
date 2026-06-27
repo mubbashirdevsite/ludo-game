@@ -1,0 +1,387 @@
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ===== GAME CONTAINER ===== */
+.game-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    text-align: center;
+    max-width: 700px;
+    width: 100%;
+}
+
+h1 {
+    color: #667eea;
+    font-size: 42px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== SCREENS ===== */
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* ===== START SCREEN ===== */
+.player-selection {
+    margin: 30px 0;
+}
+
+.player-count-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    font-size: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+}
+
+.player-count-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== BOARD ===== */
+.board-container {
+    display: inline-block;
+    margin: 20px auto;
+    overflow-x: auto;
+}
+
+.ludo-board {
+    display: grid;
+    grid-template-columns: repeat(15, 35px);
+    grid-template-rows: repeat(15, 35px);
+    gap: 2px;
+    background: #333;
+    padding: 2px;
+    border: 4px solid #333;
+    border-radius: 10px;
+}
+
+/* ===== CELLS ===== */
+.cell {
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 12px;
+    cursor: default;
+    transition: all 0.2s;
+    flex-wrap: wrap;
+    overflow: visible;
+}
+
+/* Home areas */
+.home-red    { background: #ff6666; }
+.home-green  { background: #66ff66; }
+.home-yellow { background: #ffff66; }
+.home-blue   { background: #6699ff; }
+
+/* Inner base circles */
+.base-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    opacity: 0.4;
+}
+.base-red    { background: #cc0000; }
+.base-green  { background: #006600; }
+.base-yellow { background: #cccc00; }
+.base-blue   { background: #000099; }
+
+/* Safe spots */
+.safe {
+    background: #f0f0f0;
+}
+.safe::after {
+    content: '★';
+    color: gold;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+/* Colored home paths */
+.path-red    { background: #ffcccc; }
+.path-green  { background: #ccffcc; }
+.path-yellow { background: #ffffcc; }
+.path-blue   { background: #ccccff; }
+
+/* Starting spots */
+.start-red    { background: #ff6666; border: 3px solid #ff0000; }
+.start-green  { background: #66ff66; border: 3px solid #00cc00; }
+.start-yellow { background: #ffff66; border: 3px solid #cccc00; }
+.start-blue   { background: #6699ff; border: 3px solid #0000cc; }
+
+/* Center cell */
+.center {
+    background: linear-gradient(135deg, #ff4444 25%, #44cc44 25%, #44cc44 50%, #ffff44 50%, #ffff44 75%, #4444ff 75%);
+    font-size: 22px;
+}
+
+/* ===== TOKENS ===== */
+.token {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    position: absolute;
+    cursor: default;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Token offset for multiple tokens on same cell */
+.token:nth-child(1) { transform: translate(-5px, -5px); }
+.token:nth-child(2) { transform: translate(5px, -5px); }
+.token:nth-child(3) { transform: translate(-5px, 5px); }
+.token:nth-child(4) { transform: translate(5px, 5px); }
+
+.token.selectable {
+    animation: pulse-token 0.8s infinite;
+    cursor: pointer;
+    border-color: #fff;
+    box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes pulse-token {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.2); }
+}
+
+.token-red    { background: radial-gradient(circle at 35% 35%, #ff6666, #cc0000); }
+.token-green  { background: radial-gradient(circle at 35% 35%, #66ee66, #009900); }
+.token-yellow { background: radial-gradient(circle at 35% 35%, #ffff66, #ccaa00); }
+.token-blue   { background: radial-gradient(circle at 35% 35%, #6699ff, #0000cc); }
+
+/* ===== GAME INFO ===== */
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.player-info {
+    background: #f8f9fa;
+    padding: 12px 20px;
+    border-radius: 10px;
+    min-width: 130px;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.player-info.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    border-color: #fff;
+}
+
+.player-info h3 {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.player-info p {
+    font-size: 13px;
+    margin: 3px 0;
+}
+
+/* ===== DICE ===== */
+.dice-container {
+    margin: 20px 0;
+}
+
+.dice {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border: 3px solid #333;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 auto;
+    user-select: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.dice:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dice.rolling {
+    animation: roll 0.5s ease-in-out;
+}
+
+.dice.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+@keyframes roll {
+    0%   { transform: rotate(0deg) scale(1); }
+    25%  { transform: rotate(90deg) scale(1.1); }
+    50%  { transform: rotate(180deg) scale(1); }
+    75%  { transform: rotate(270deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 8px;
+    transition: all 0.3s;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* ===== MESSAGE BOX ===== */
+.message {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    font-weight: bold;
+    color: #856404;
+    font-size: 15px;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== WIN SCREEN ===== */
+.winner-announcement {
+    font-size: 32px;
+    color: #667eea;
+    margin: 20px 0;
+    animation: celebrate 1s infinite;
+}
+
+@keyframes celebrate {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.1); }
+}
+
+/* ===== INSTRUCTIONS ===== */
+.instructions {
+    background: #f8f9fa;
+    border-left: 4px solid #667eea;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+    border-radius: 5px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.instructions h3 {
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.instructions ul {
+    margin-left: 20px;
+    color: #555;
+    line-height: 2;
+}
+
+/* ===== SCORE BOARD ===== */
+.score-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 15px;
+}
+
+.score-table th,
+.score-table td {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.score-table th {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.score-table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .ludo-board {
+        grid-template-columns: repeat(15, 22px);
+        grid-template-rows: repeat(15, 22px);
+    }
+    .token {
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+    }
+    h1 { font-size: 28px; }
+    .dice { width: 60px; height: 60px; font-size: 36px; }
+    .player-count-btn { padding: 14px 25px; font-size: 16px; }
+}
